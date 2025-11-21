@@ -6,3 +6,4 @@ Vuln.md
 generated/
 dist/
 migrations/
+.next
