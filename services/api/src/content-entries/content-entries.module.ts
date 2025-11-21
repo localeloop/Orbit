@@ -6,4 +6,5 @@ import { ContentEntriesController } from './content-entries.controller';
   controllers: [ContentEntriesController],
   providers: [ContentEntriesService],
 })
-export class ContentEntriesModule {}
+
+export class ContentEntriesModule { }
