@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Tenant {
+  id           String         @id @default(uuid())
+  name         String
+  plan         String?
+  createdAt    DateTime       @default(now())
+  websites     Website[]
+  users        User[]
+  ContentEntry ContentEntry[]
+  AuditLog     AuditLog[]
+}
+
+model Website {
+  id           String         @id @default(uuid())
+  tenant       Tenant         @relation(fields: [tenantId], references: [id])
+  tenantId     String
+  handle       String
+  domain       String?
+  settings     Json           @default("{}")
+  lastDeployed DateTime?
+  createdAt    DateTime       @default(now())
+  content      ContentEntry[]
+}
+
+model ContentEntry {
+  id        String   @id @default(uuid())
+  website   Website  @relation(fields: [websiteId], references: [id])
+  websiteId String
+  key       String
+  locale    String   @default("en")
+  content   Json
+  version   Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Tenant    Tenant?  @relation(fields: [tenantId], references: [id])
+  tenantId  String?
+
+  @@unique([websiteId, key, locale])
+}
+
+model User {
+  id           String     @id @default(uuid())
+  tenant       Tenant     @relation(fields: [tenantId], references: [id])
+  tenantId     String
+  email        String     @unique
+  passwordHash String?
+  role         String     @default("admin")
+  createdAt    DateTime   @default(now())
+  AuditLog     AuditLog[]
+}
+
+model AuditLog {
+  id            String   @id @default(uuid())
+  action        String
+  performedById String?
+  tenantId      String?
+  metadata      Json?
+  createdAt     DateTime @default(now())
+
+  // Relations ( optional )
+  performedBy User?   @relation(fields: [performedById], references: [id])
+  tenant      Tenant? @relation(fields: [tenantId], references: [id])
+}
