@@ -146,14 +146,3 @@ Orbit is the CMS that scales with your ambitions.
 Orbit is a modern, secure, developer-centric CMS created to solve the real-world problem of managing content across multiple websites. It is lean in its MVP form but architected to expand into a powerful multi-service platform.
 
 Orbit is not just a tool—it’s a long-term foundation and demonstration of engineering excellence.
-
----
-
-If you'd like, I can also generate:
-
-- A **marketing-friendly landing page copy**  
-- A **technical whitepaper**  
-- A **diagram pack** (architecture, request flow, component map)  
-- A **developer quickstart guide**  
-
-Just tell me!
