@@ -69,11 +69,12 @@ Orbit isolates tenants, enforces auth, and avoids exposing internal fields.
 
 # High-Level Architecture 
 
-[ Admin Panel ( next.js ) ] --> [ Orbit API ( nestjs ) ] --> [ PostgreslSQL + JSONB ] --> [ S3 Media Storage ] --> (Future)[ Ai, Bookings, Inventory ]
+[Admin Panel ( next.js )] --> [Orbit API ( nestjs )] --> [PostgreslSQL + JSONB] --> [S3 Media Storage] --> (Future)[Ai, Bookings, Inventory]
 
 ## Frontends consume data via: 
 
 GET /v1/websites/:siteId/content?key=header
+
 GET /v1/websites/:siteId/sync?since=<timestamp>
 
 ---
