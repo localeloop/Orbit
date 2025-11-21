@@ -1,134 +1,158 @@
-# Orbit CMS — Project Scope Document
+# 🌐 Orbit CMS — Overview & Purpose
 
-## 1. Overview
+Orbit CMS is a **multi-tenant, headless content management system** designed to power multiple websites from a single, centralized platform. It is built for developers and teams who need a clean, flexible, API-driven way to manage structured website content—without relying on bloated page builders or tightly coupled legacy systems.
 
-Orbit CMS is a multi-tenant, API-driven content management platform designed to manage multiple websites from a single administrative interface. It serves as the foundation of a larger ecosystem of microservices (bookings, inventory, AI assistants, etc.), but the core CMS focuses on structured content delivery, tenant isolation, and extensibility.
-
-The system is built using:
-
-* **Backend:** NestJS + Prisma + PostgreSQL/Supabase
-* **Frontend Admin:** Next.js (admin panel)
-* **Content Delivery:** REST API consumed by multiple websites
-* **Storage:** S3-compatible object storage for media
+Orbit is fast, modular, and engineered with future scalability in mind.
 
 ---
 
-## 2. Purpose of Orbit CMS
+## 🚀 What Is Orbit?
 
-The CMS aims to:
+Orbit is a **headless CMS** that:
 
-* Centralize website content management for multiple client sites
-* Reduce manual development overhead for content updates
-* Provide a flexible data structure that adapts to different frontend architectures
-* Serve as the "core hub" that future services orbit around (AI bots, bookings, e-commerce, etc.)
-* Demonstrate engineering ability and architectural design for career and business opportunities
+- Manages content for **multiple websites** under one tenant system  
+- Stores structured content in a **flexible JSON format**  
+- Exposes clean, secure **REST API endpoints** for frontends to consume  
+- Allows developers to build websites that dynamically pull and sync content  
+- Serves as the “central hub” around which future microservices will orbit
 
-Orbit focuses on developer productivity, scalability, and low hosting overhead.
-
----
-
-## 3. Core Functional Scope
-
-### 3.1 Multi-Tenancy
-
-* Each tenant represents a customer or business
-* Tenants can own one or multiple websites
-* All API responses must be isolated by tenant scope
-* Authentication tokens contain tenant context
-
-### 3.2 Website Management
-
-* API endpoints for creating, reading, updating, and deleting websites
-* Each website includes metadata (domain, handle, settings)
-* Frontends use the website ID to fetch content
-
-### 3.3 Content Management
-
-* CRUD for structured content entries using JSON fields
-* Keys represent content sections (e.g., `header`, `footer`, `home.hero`)
-* Locale support for multilingual content
-* Versioning built-in for later rollback capabilities
-* Flexible content schema allowing each website to define its own structure
-
-### 3.4 Media Management
-
-* Upload signed URLs for media (images, documents, etc.)
-* Store metadata: MIME type, size, path, and any custom information
-
-### 3.5 Authentication & Authorization
-
-* User accounts with roles (admin, editor)
-* JWT authentication for API access
-* Permissions enforced by role and tenant scope
-
-### 3.6 Content Delivery to Websites
-
-* Frontend applications fetch content through REST endpoints
-* Websites poll the API for updates:
-
-  * `/sync` endpoint returns changed keys + version numbers
-  * Updated content fetched in bundles or individually
+Unlike monolithic CMS platforms, Orbit is designed from the ground up as a **content platform**, not a page builder.
 
 ---
 
-## 4. Future (Out-of-Scope for MVP)
+## 🎯 Why Orbit Exists
 
-These features are intentionally excluded from the first release but will be integrated as separate microservices:
+Modern agencies and developers face a real problem:
 
-* Booking & appointment systems
-* Inventory / stock management
-* AI content assistant service
-* Automated SEO optimization
-* Detailed audit logs and analytics dashboards
-* Webhooks or pub/sub for real-time updates
-* Advanced RBAC with granular permissions
-* Billing system for tenants
+> **The more websites you maintain, the more time you waste updating content manually.**
 
-These are planned, but not part of the MVP scope.
+Orbit solves this by providing:
 
----
+### ✔ Centralized content management  
+One interface. Multiple sites. No duplicated work.
 
-## 5. Non-Goals
+### ✔ Faster development & deployment  
+Frontends pull content on demand—no need for hard-coded CMS pages.
 
-* Not intended to be a WordPress-style page builder
-* Not a drag-and-drop layout system
-* Does not render frontend pages itself (headless only)
-* Not meant to replace frameworks like Strapi or Sanity for general use
+### ✔ Freedom for frontend developers  
+Orbit doesn’t dictate how the website looks or behaves.  
+Each site is uniquely built, Orbit simply feeds it content.
 
-Orbit is a **purpose-driven, developer-centric CMS tailored to specific websites**, not a generic CMS platform.
+### ✔ Long-term scalability  
+Orbit’s architecture is intentionally “microservice-friendly.”  
+Future modules—such as bookings, stock management, AI bots—plug in cleanly.
 
 ---
 
-## 6. Constraints
+## 🧱 Core Principles
 
-* Hosting costs should remain minimal during early development
-* Polling is preferred over webhooks for MVP simplicity
-* Database schema must support flexible content without breaking structure
-* Security is mandatory: all CRUD operations must require authentication
+### **1. Multi-Tenancy**
+Orbit supports multiple clients, each with multiple websites.
 
----
+### **2. Headless by Design**
+No rendering, no themes—just content and APIs.
 
-## 7. Assumptions
+### **3. JSON-powered Flexibility**
+Every content entry is structured JSON that mirrors the frontend’s components.
 
-* All frontends using Orbit will be built in Next.js
-* Users are trusted internal administrators or developers
-* Tenants expect fast, reliable content management but not guaranteed real-time updates
-* Future microservices will communicate with Orbit via internal API or gateway
+### **4. Developer Experience First**
+Orbit is built for engineers:
+- Type-safe backend (NestJS + Prisma)
+- Simple REST endpoints
+- Versioning built into content
+- Clean migrations and database structure
 
----
-
-## 8. Success Criteria
-
-Orbit CMS is considered successful if:
-
-* Multiple websites can reliably fetch content from Orbit
-* Admins can manage content without code changes
-* Tenants are properly isolated and secure
-* The system is stable enough for commercial usage
-* It serves as a showcase of technical ability for engineering roles
+### **5. Secure**
+Orbit isolates tenants, enforces auth, and avoids exposing internal fields.
 
 ---
 
-## 9. Summary
+# High-Level Architecture 
 
-Orbit CMS provides a scalable foundation for managing multi-tenant websites through a robust API and flexible content model. While simple at first, its architecture is intentionally designed for long-term growth, microservice expansion, and AI-driven automation. This scope document outlines what Orbit **is**, **is not**, and **will become** as the platform evolves.
+[ Admin Panel ( next.js ) ] --> [ Orbit API ( nestjs ) ] --> [ PostgreslSQL + JSONB ] --> [ S3 Media Storage ] --> (Future)[ Ai, Bookings, Inventory ]
+
+## Frontends consume data via: 
+
+GET /v1/websites/:siteId/content?key=header
+GET /v1/websites/:siteId/sync?since=<timestamp>
+
+---
+
+## 🔧 What Can Orbit Do Today? (MVP Features)
+
+- Manage multiple tenants and websites  
+- CRUD for website content stored as JSON  
+- Media uploads via signed URLs  
+- Authentication and role-based access (admin/editor)  
+- Version numbers for content entries  
+- Websites check for updates using a polling sync system  
+
+---
+
+## 🌱 What Orbit Will Become (Future Roadmap)
+
+Orbit will evolve into a full ecosystem with its CMS at the center. Planned modules include:
+
+- Booking & appointment systems  
+- Inventory & stock management  
+- AI-powered content assistant  
+- Automated SEO optimization  
+- Real-time webhook notifications  
+- Analytics & audit logs  
+- Full RBAC with granular permissions  
+- Multi-language content workflows  
+
+Each module will exist as a **separate microservice**, connecting through Orbit’s API gateway.
+
+---
+
+## 🧠 Who Is Orbit For?
+
+### Developers  
+Who want a fast, flexible, structured CMS without vendor lock-in.
+
+### Web Agencies  
+Who manage many websites and need a scalable way to update content.
+
+### Startups  
+Who need an extensible foundation that can grow into a suite of services.
+
+### You (the builder)  
+Orbit doubles as a **portfolio showcase**—a real production-ready system demonstrating engineering skill in:
+
+- backend architecture  
+- multi-tenancy  
+- content management  
+- security and APIs  
+- microservice design  
+- devops and deployment  
+
+---
+
+## 🌟 Key Benefits
+
+- **Speed:** Content updates reach all sites automatically.  
+- **Simplicity:** JSON-based content is easy to integrate with components.  
+- **Control:** Full ownership of your data, schema, and API.  
+- **Extensibility:** Designed for long-term growth into a larger ecosystem.  
+
+Orbit is the CMS that scales with your ambitions.
+
+---
+
+## 🧭 Summary
+
+Orbit is a modern, secure, developer-centric CMS created to solve the real-world problem of managing content across multiple websites. It is lean in its MVP form but architected to expand into a powerful multi-service platform.
+
+Orbit is not just a tool—it’s a long-term foundation and demonstration of engineering excellence.
+
+---
+
+If you'd like, I can also generate:
+
+- A **marketing-friendly landing page copy**  
+- A **technical whitepaper**  
+- A **diagram pack** (architecture, request flow, component map)  
+- A **developer quickstart guide**  
+
+Just tell me!
